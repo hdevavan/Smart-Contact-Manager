@@ -1,6 +1,7 @@
 package com.smart.controllers;
 
 import com.smart.dao.UserRepository;
+import com.smart.entities.Contact;
 import com.smart.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,8 @@ public class HomeController {
         user.setAbout("Full Stack Developer from New Delhi");
         user.setRole("ROLE_USER");
         user.setEnabled(true);
-        user.setContacts(new ArrayList<>());
+        Contact c = new Contact();
+        user.getContacts().add(c);
 
         return userRepo.save(user);
     }
