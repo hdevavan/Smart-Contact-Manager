@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +39,12 @@ public class HomeController {
 
     @RequestMapping("/login/")
     public String login(Model model) {
+        model.addAttribute("title","Login");
+        return "login";
+    }
+
+    @RequestMapping(value = "/do_register", method = RequestMethod.POST)
+    public String doRegister(Model model) {
         model.addAttribute("title","Login");
         return "login";
     }

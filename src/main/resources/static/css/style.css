@@ -11,3 +11,9 @@ body{
     background-size: cover !important;
     color: white;
 }
+.my-card{
+    background: #FFFFFF;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+}
