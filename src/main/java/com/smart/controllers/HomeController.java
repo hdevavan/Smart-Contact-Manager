@@ -3,13 +3,12 @@ package com.smart.controllers;
 import com.smart.dao.UserRepository;
 import com.smart.entities.Contact;
 import com.smart.entities.User;
+import com.smart.helper.Message;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -34,6 +33,7 @@ public class HomeController {
     @RequestMapping("/sign-up/")
     public String signUp(Model model) {
         model.addAttribute("title","Sign-Up");
+        model.addAttribute("user", new User());
         return "signup";
     }
 
@@ -44,8 +44,23 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/do_register", method = RequestMethod.POST)
-    public String doRegister(Model model) {
-        model.addAttribute("title","Login");
-        return "login";
+    public String doRegister(@ModelAttribute("user") User user, @RequestParam(value="agreement", defaultValue = "false") boolean agreement, Model model, HttpSession session) {
+        try {
+            if(!agreement){
+                System.out.println("You have entered the wrong data");
+                model.addAttribute("user", user);
+                throw new Exception("User haven't checked the terms and conditions ");
+            }
+            user.setImage("profile.jpg");
+            user.setRole("ROLE_USER");
+            user.setEnabled(true);
+            userRepo.save(user);
+            session.setAttribute("message", new Message("User added successfully.", "alert-success"));
+        } catch (Exception e){
+            session.setAttribute("message", new Message(e.getMessage(),"alert-danger"));
+            return "signup";
+        }
+        return "signup";
+
     }
 }
